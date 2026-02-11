@@ -1,0 +1,34 @@
+{
+  "name": "tg-rss",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal RSS digest bot — fetches feeds, extracts content, sends daily Telegram digest",
+  "scripts": {
+    "dev": "npx convex dev",
+    "test": "vitest",
+    "test:once": "vitest run",
+    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\""
+  },
+  "dependencies": {
+    "convex": "^1.17.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@edge-runtime/vm": "^4.0.0",
+    "@types/node": "^25.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "convex-test": "^0.0.34",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}
