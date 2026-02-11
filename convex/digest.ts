@@ -39,7 +39,9 @@ export const runDailyDigest = internalAction({
 export const collectAndSend = internalAction({
   args: {},
   handler: async (ctx) => {
+    console.log('Starting digest collection...')
     const undigested = await ctx.runQuery(internal.articles.getUndigested)
+    console.log(`Found ${undigested.length} undigested articles`)
 
     // Get feed titles for better formatting
     const feeds: Doc<'feeds'>[] = await ctx.runQuery(internal.feeds.list)
@@ -57,6 +59,7 @@ export const collectAndSend = internalAction({
     // Get recent errors (last 24h)
     const since = Date.now() - 24 * 60 * 60 * 1000
     const errors = await ctx.runQuery(internal.fetchErrors.getRecent, { since })
+    console.log(`Found ${errors.length} recent fetch errors`)
 
     const digestErrors: DigestError[] = errors.map((e: Doc<'fetchErrors'>) => {
       const feed = feeds.find((f: Doc<'feeds'>) => f._id === e.feedId)
@@ -73,9 +76,11 @@ export const collectAndSend = internalAction({
       errors: digestErrors,
       date,
     })
+    console.log(`Formatted into ${messages.length} messages`)
 
     // Send messages to Telegram
-    for (const msg of messages) {
+    for (const [i, msg] of messages.entries()) {
+      console.log(`Sending message ${i + 1}/${messages.length}...`)
       await ctx.runAction(internal.telegram.sendMessage, { text: msg })
     }
 

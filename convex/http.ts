@@ -67,7 +67,18 @@ http.route({
       } else if (text.startsWith('/digest')) {
         await ctx.runAction(internal.digest.runDailyDigest, {})
         await ctx.runAction(internal.telegram.sendMessage, {
-          text: escapeMarkdownV2('⏳ Triggering manual digest...'),
+          text: escapeMarkdownV2(
+            '⏳ Triggering manual digest (fetching and sending)...',
+          ),
+        })
+      } else if (text.startsWith('/help')) {
+        const helpText = `📚 *Bot Commands:*
+/add <url> \\- Subscribe to an RSS feed
+/list \\- Show your subscriptions
+/digest \\- Trigger a manual digest run
+/help \\- Show this message`
+        await ctx.runAction(internal.telegram.sendMessage, {
+          text: escapeMarkdownV2(helpText),
         })
       }
     } else {

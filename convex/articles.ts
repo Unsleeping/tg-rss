@@ -47,6 +47,7 @@ export const markDigested = internalMutation({
     digestedAt: v.number(),
   },
   handler: async (ctx, args) => {
+    console.log(`Marking ${args.articleIds.length} articles as digested`)
     for (const articleId of args.articleIds) {
       await ctx.db.patch(articleId, { digestedAt: args.digestedAt })
     }

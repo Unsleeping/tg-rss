@@ -12,9 +12,15 @@ export const sendMessage = internalAction({
     const chatId = process.env.TELEGRAM_CHAT_ID
 
     if (!token || !chatId) {
-      console.error('TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set')
+      console.error(
+        'TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set in Convex environment variables',
+      )
       return
     }
+
+    console.log(
+      `Sending message to chat ${chatId}: ${args.text.substring(0, 50)}...`,
+    )
 
     const url = `https://api.telegram.org/bot${token}/sendMessage`
 
@@ -33,7 +39,9 @@ export const sendMessage = internalAction({
 
     if (!response.ok) {
       const error = await response.text()
+      console.error(`Telegram API error: ${error}`)
       throw new Error(`Telegram API error: ${error}`)
     }
+    console.log('Message sent successfully')
   },
 })
