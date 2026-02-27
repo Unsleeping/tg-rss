@@ -8,6 +8,8 @@ import { rssContentExtractor } from './lib/contentExtractor'
 const MAX_RETRIES = 3
 const RETRY_DELAYS_MS = [0, 30_000, 120_000] // immediate, 30s, 2min
 
+const MIN_PUBLISHED_DATE = new Date('2025-01-01').getTime()
+
 export const fetchFeed = internalAction({
   args: {
     feedId: v.id('feeds'),
@@ -31,6 +33,14 @@ export const fetchFeed = internalAction({
 
       const items = feed.items ?? []
       for (const item of items) {
+        const publishedAt = item.pubDate
+          ? new Date(item.pubDate).getTime()
+          : Date.now()
+
+        if (publishedAt < MIN_PUBLISHED_DATE) {
+          continue
+        }
+
         const summary = rssContentExtractor.extract(
           item.contentSnippet || item.content || item.summary || '',
         )
@@ -40,9 +50,7 @@ export const fetchFeed = internalAction({
           title: item.title || 'Untitled',
           link: item.link || '',
           summary,
-          publishedAt: item.pubDate
-            ? new Date(item.pubDate).getTime()
-            : Date.now(),
+          publishedAt,
           guid: item.guid || item.link || item.title || '',
         })
       }
