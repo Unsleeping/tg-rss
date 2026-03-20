@@ -32,14 +32,23 @@ export function escapeMarkdownV2(text: string): string {
 }
 
 /**
+ * Escapes special characters for URLs in Telegram MarkdownV2 links.
+ * Inside (...) part of inline link, ')' and '\\' must be escaped.
+ */
+export function escapeMarkdownV2Url(url: string): string {
+  return url.replace(/([)\\])/g, '\\$1')
+}
+
+/**
  * Formats a single article for the digest.
  */
 function formatArticle(article: DigestArticle): string {
   const title = escapeMarkdownV2(article.title)
   const summary = escapeMarkdownV2(article.summary)
   const feedTitle = escapeMarkdownV2(article.feedTitle)
+  const link = escapeMarkdownV2Url(article.link)
 
-  return `📌 [${title}](${article.link})\n_from ${feedTitle}_\n${summary}`
+  return `📌 [${title}](${link})\n_from ${feedTitle}_\n${summary}`
 }
 
 /**

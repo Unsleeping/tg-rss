@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { escapeMarkdownV2, formatDigest, type DigestData } from './formatDigest'
+import {
+  escapeMarkdownV2,
+  escapeMarkdownV2Url,
+  formatDigest,
+  type DigestData,
+} from './formatDigest'
 
 describe('escapeMarkdownV2', () => {
   it('should escape special characters', () => {
@@ -10,6 +15,17 @@ describe('escapeMarkdownV2', () => {
 
   it('should handle text without special chars', () => {
     expect(escapeMarkdownV2('Hello world')).toBe('Hello world')
+  })
+})
+
+describe('escapeMarkdownV2Url', () => {
+  it('should escape closing parentheses and backslashes in URLs', () => {
+    expect(escapeMarkdownV2Url('https://example.com/some-(path)\\file')).toBe(
+      'https://example.com/some-(path\\)\\\\file',
+    )
+    expect(escapeMarkdownV2Url('https://example.com/?q=(test)')).toBe(
+      'https://example.com/?q=(test\\)',
+    )
   })
 })
 

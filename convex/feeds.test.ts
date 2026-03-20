@@ -40,8 +40,9 @@ describe('feeds', () => {
   it('should fail to remove non-existent feed', async () => {
     const t = convexTest(schema, modules)
     const fakeId = 'kj7...' as any
-    await expect(t.mutation(api.feeds.remove, { feedId: fakeId })).rejects
-      .toThrow
+    await expect(
+      t.mutation(api.feeds.remove, { feedId: fakeId }),
+    ).rejects.toThrow()
   })
 
   it('should list active feeds', async () => {
